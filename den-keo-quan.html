@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đèn Kéo Quân 3D </title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #000; 
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            position: relative;
+        }
+
+        .liquid-bg {
+            position: absolute;
+            top: -10%; left: -10%;
+            width: 120%; height: 120%; 
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .liquid-layer {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: blur(80px) saturate(1.5);
+            transform: scale(1.1);
+            opacity: 0;
+            animation-duration: 24s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+
+        .liquid-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .bg-1 { animation-name: fade1; }
+        .bg-2 { animation-name: fade2; }
+        .bg-3 { animation-name: fade3; }
+        .bg-4 { animation-name: fade4; }
+        .bg-5 { animation-name: fade5; }
+        .bg-6 { animation-name: fade6; }
+
+        @keyframes fade1 { 0%, 100% { opacity: 1; } 16.66%, 83.33% { opacity: 0; } }
+        @keyframes fade2 { 0%, 33.33%, 100% { opacity: 0; } 16.66% { opacity: 1; } }
+        @keyframes fade3 { 0%, 16.66%, 50%, 100% { opacity: 0; } 33.33% { opacity: 1; } }
+        @keyframes fade4 { 0%, 33.33%, 66.66%, 100% { opacity: 0; } 50% { opacity: 1; } }
+        @keyframes fade5 { 0%, 50%, 83.33%, 100% { opacity: 0; } 66.66% { opacity: 1; } }
+        @keyframes fade6 { 0%, 66.66%, 100% { opacity: 0; } 83.33% { opacity: 1; } }
+
+        h2 {
+            position: absolute;
+            top: 30px;
+            color: rgba(255,255,255,0.9);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin: 0;
+            font-weight: 300;
+        }
+
+        .btn-back {
+            position: absolute;
+            bottom: 40px;
+            padding: 12px 30px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px; 
+            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px); 
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+            transform: translateY(-2px);
+        }
+
+        .scene {
+            width: 240px; 
+            height: 480px; 
+            perspective: 1200px; 
+            margin-top: 20px;
+        }
+
+        .lantern {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: spin 24s infinite linear; 
+            cursor: pointer;
+        }
+
+        .face {
+            position: absolute;
+            width: 240px; 
+            height: 480px; 
+            left: 0;
+            top: 0;
+            border-radius: 12px; 
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.15); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 15px rgba(255,255,255,0.1); 
+        }
+
+        .face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .face1 { transform: rotateY(0deg) translateZ(208px); }
+        .face2 { transform: rotateY(60deg) translateZ(208px); }
+        .face3 { transform: rotateY(120deg) translateZ(208px); }
+        .face4 { transform: rotateY(180deg) translateZ(208px); }
+        .face5 { transform: rotateY(240deg) translateZ(208px); }
+        .face6 { transform: rotateY(300deg) translateZ(208px); }
+
+        @keyframes spin { 
+            0%   { transform: rotateY(0deg); }
+            100% { transform: rotateY(-360deg); } 
+        }
+
+        /* --- ĐỒNG BỘ PAUSE --- */
+        body.paused .lantern,
+        body.paused .liquid-layer {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+<body id="mainBody">
+
+    <div class="liquid-bg">
+        <img src="images/1.jpg" class="liquid-layer bg-1">
+        <img src="images/2.jpg" class="liquid-layer bg-2">
+        <img src="images/3.jpg" class="liquid-layer bg-3">
+        <img src="images/4.jpg" class="liquid-layer bg-4">
+        <img src="images/5.jpg" class="liquid-layer bg-5">
+        <img src="images/6.jpg" class="liquid-layer bg-6">
+    </div>
+    <div class="liquid-overlay"></div>
+
+    <h2>Đèn Kéo Quân</h2>
+
+    <div class="scene">
+        <div class="lantern" id="lantern">
+            <div class="face face1"><img src="images/1.jpg" alt="Mặt 1"></div>
+            <div class="face face2"><img src="images/2.jpg" alt="Mặt 2"></div>
+            <div class="face face3"><img src="images/3.jpg" alt="Mặt 3"></div>
+            <div class="face face4"><img src="images/4.jpg" alt="Mặt 4"></div>
+            <div class="face face5"><img src="images/5.jpg" alt="Mặt 5"></div>
+            <div class="face face6"><img src="images/6.jpg" alt="Mặt 6"></div>
+        </div>
+    </div>
+
+    <a href="index.html" class="btn-back">Trở về Portfolio</a>
+
+    <script>
+        const lantern = document.getElementById('lantern');
+        const body = document.getElementById('mainBody');
+
+        lantern.addEventListener('mouseenter', () => {
+            body.classList.add('paused');
+        });
+
+        lantern.addEventListener('mouseleave', () => {
+            body.classList.remove('paused');
+        });
+    </script>
+</body>
+</html>
